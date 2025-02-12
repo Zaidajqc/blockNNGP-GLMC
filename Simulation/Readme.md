@@ -1,4 +1,4 @@
-# GLMC-block-NNGP 
+# GLMC-blockNNGP 
 
 ## Zaida Quiroz, Marcos Prates and Carlos Pizango.
 
