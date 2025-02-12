@@ -1,11 +1,11 @@
-# Full Multilevel block-NNGP 
+# GLMC-blockNNGP 
 
-## Zaida Quiroz, Marcos Prates, Zhiyong Hu and Dipak Dey.
+## Zaida Quiroz, Marcos Prates and Carlos Pizango.
 
-We provide the R code needed to run  simulations of generalized full multilevel block-NNGP models using Integrated Nested Laplace approximation (INLA). 
+We provide the R code needed to run  simulations of Generalized Linear model of coregionalization through block-NNGP using Integrated Nested Laplace approximation (INLA). 
 
 You have to add "INLA"  from https://www.r-inla.org/download-install.  Main code (with example usage) is denoted by [main]. 
 
 
-- [main]runfullMultilevel.R: simulate  data and fit the  models to the simulated data.
+- [main]runGLMC_sim1.R: simulate  data and fit the  models to the simulated data.
 - find neighbor.R:  auxiliary functions.
