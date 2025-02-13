@@ -953,7 +953,7 @@ blockNNGP_pred2 = function(case, n.blocks, num.nb, data.est, pred.data,res,n.sam
       m2    <- t(C12)%*%(invCn02 %*%postng.w2[blocki])
       v2    <- postng.sigmasq2 - t(C12)%*%(invCn02 %*%C12)
       w02   <- m2 + sqrt(v2)*rnorm(1)
-      XX    <- t(as.matrix(X2.pred[i,],1,2)) # tenia error X.pred 
+      XX    <- t(as.matrix(X2.pred[i,],1,2)) 
       if(family=="gaussian"){
         y2[s] <- XX%*%postng.beta2 + postng.lambda*w0 + w02 + postng.tausq2*rnorm(1)
       }else if(family=="poisson"){
