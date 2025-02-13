@@ -8,4 +8,10 @@ You have to add "INLA"  from https://www.r-inla.org/download-install.  Main code
 
 
 - [main]runblockNNGP-GLMC.R: fit the  models to the BSS data.
-- utils.R:  auxiliary functions.
+- blockNNGPfunctions.R: auxiliary code that contains blockNNGP functions to run blockNNGP-GLMC and NNGP-GLMC models. 
+- blockNNGPfunctions2.R: auxiliary code that contains blockNNGP functions to run Palmí-Perales model using blockNNGP and NNGP. 
+- blockNNGPrgeneric.R: INLA-rgeneric code for  blockNNGP spatial random effect.
+- NNGPrgeneric.R: INLA-rgeneric code for  NNGP spatial random effect.
+- summary_functions.R: to print summary (similar to the INLA summary function) of reparameterized parameters for blockNNGP-GLMC and NNGP-GLMC models.
+- summary_functions2.R: to print summary (similar to the INLA summary function) of reparameterized parameters for Palmí-Perales(2023)  model  using blockNNGP and NNGP.
+- utils.R: auxiliary functions.
