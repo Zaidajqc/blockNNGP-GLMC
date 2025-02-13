@@ -18,3 +18,12 @@ Main code (with example usage) is denoted by [main].
 - summary_functions.R: to print summary (similar to the INLA summary function) of reparameterized parameters for blockNNGP-GLMC and NNGP-GLMC models.
 - summary_functions2.R: to print summary (similar to the INLA summary function) of reparameterized parameters for Palmí-Perales(2023)  model  using blockNNGP and NNGP.
 - utils.R: auxiliary functions.
+
+```
+Zaida Quiroz
+Science Department
+School of Mathematics
+Pontificia Universidad Católica del Perú
+Lima, Perú
+E-mail: zquiroz@pucp.edu.pe
+```
