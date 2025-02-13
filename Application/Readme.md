@@ -2,10 +2,13 @@
 
 ## Zaida Quiroz, Marcos Prates and Carlos Pizango.
 
-We provide the R code needed to run  the application of ''Generalized Linear model of coregionalization through block-NNGP using Integrated Nested Laplace approximation (INLA)´´. 
+We provide the R code needed to run  the application of "Fast Bayesian inference of generalized linear blockNNGP model of coregionalization through INLA". 
 
-You have to add "INLA"  from https://www.r-inla.org/download-install.  Main code (with example usage) is denoted by [main]. 
+You have to add "INLA"  from https://www.r-inla.org/download-install.  
 
+Download BSS data: data.est.Rdata and data.pred.Rdata
+
+Main code (with example usage) is denoted by [main]. 
 
 - [main]runblockNNGP-GLMC.R: fit the  models to the BSS data.
 - blockNNGPfunctions.R: auxiliary code that contains blockNNGP functions to run blockNNGP-GLMC and NNGP-GLMC models. 
