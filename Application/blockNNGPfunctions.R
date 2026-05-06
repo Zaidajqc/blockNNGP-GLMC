@@ -1,27 +1,30 @@
 #' @title blockNNGP_IRREG()
-#' @description function  fits  block-NNGP models through IRREGULAR BLOCKS (Voronoi polygons) using INLA
+#' @description function  to order the data, create the mask for Q, 
+#' and create blocks and indexed required for  blockNNGP-GLMC models
+#' through  Voronoi polygons.
 
-blockNNGP_IRREG = function(case="irregular", data.est , n.blocks, num.nb,name.cov,par.cov=NULL,data.pred){
+blockNNGP_IRREG = function(case = "irregular", data.est , n.blocks, 
+                           num.nb, name.cov, par.cov=NULL, data.pred){
   
 
-    loc=data.est[,1:2]
+  loc <-data.est[,1:2]
   if(length(which(duplicated(loc))==T)>0)  {
     print("duplicated locations...") 
-    inddup <- which(duplicated(loc)==TRUE)
+    inddup   <- which(duplicated(loc)==TRUE)
     data.est <- data.est[-inddup,]
   }
-    locp=data.pred[,1:2]
+    locp <- data.pred[,1:2]
     if(length(which(duplicated(locp))==T)>0)  {
       print("duplicated locations...") 
-      inddup <- which(duplicated(locp)==TRUE)
+      inddup    <- which(duplicated(locp)==TRUE)
       data.pred <- data.pred[-inddup,]
     }
     
-    data.est.orig <- data.est 
+    data.est.orig  <- data.est 
     data.pred.orig <- data.pred
     all.data <- rbind(data.est,data.pred)
-  data.est <- all.data
-  loc=data.est[,1:2]
+    data.est <- all.data
+    loc <-data.est[,1:2]
   
  
   ###%%%%%%%%%%%%%%%%%%%%%%% START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,7 +36,6 @@ blockNNGP_IRREG = function(case="irregular", data.est , n.blocks, num.nb,name.co
   nloc <- dim(loc)[1]
   
   
-
   ds <-  data.frame(x = loc[ ,1], y = loc[ ,2])  
   fit <- kmeans(ds, centers = n.blocks)
   ds <- cbind(ds, cluster = as.factor(fit$cluster))
@@ -43,26 +45,25 @@ blockNNGP_IRREG = function(case="irregular", data.est , n.blocks, num.nb,name.co
   VoronoiPlotly(fit, ds, n.sd.x = 3, n.sd.y = 3, print.ggplot = F)
 
   
-  
   center.b <- fit$centers
   
   par(mfrow=c(1,2))
   plot(center.b)
-  text(center.b[,1]+0.05,center.b[,2],rownames(center.b),col='red')
+  text(center.b[,1]+0.05, center.b[,2], rownames(center.b), col='red')
   
   ind.block <- sort.int(center.b[,2], index.return=TRUE)$ix
   
-  newvindex <- cbind( ind.block,1:n.blocks)
+  newvindex <- cbind( ind.block, 1:n.blocks)
   
   ordered_polygons <- center.b[ind.block, ]
   
   plot(ordered_polygons)
-  text(ordered_polygons[,1]+0.05,ordered_polygons[,2],1:n.blocks,col='red')
-  rownames(ordered_polygons)<- 1:n.blocks
+  text(ordered_polygons[,1]+0.05, ordered_polygons[,2],1:n.blocks, col='red')
+  rownames(ordered_polygons) <- 1:n.blocks
   
   ds1 <- ds
   for( l in (1:n.blocks)){
-    indv <- which(ds$cluster==l)
+    indv  <- which(ds$cluster==l)
     indv1 <- newvindex[which(newvindex[,1]==l),2]
     ds1$cluster[indv] <- indv1
   }
@@ -166,9 +167,7 @@ blockNNGP_IRREG = function(case="irregular", data.est , n.blocks, num.nb,name.co
 }
 
 #' @title blockNNGP.struct()
-#' @description This function is called by choose.model().
-#' It creates the structure of neighbor blocks (or neighbors)
-#' reordering data for blockNNGP regular, block-NNGP irregular (or NNGP).
+#' @description This function calls the blockNNGP_IRREG() function.
 
 blockNNGP.struct <- function(case,data.est, n.blocks, num.nb,name.cov,par.cov,data.pred){
   if(case== 'regular'){
@@ -183,6 +182,29 @@ blockNNGP.struct <- function(case,data.est, n.blocks, num.nb,name.cov,par.cov,da
 return(build.struct)  
 }
   
+#' @title data_proc()
+#' @description  function to process (order) the data and
+#' create block and indexes for  blockNNGP-GLMC rgeneric
+#' it calls blockNNGP.struct() function.
+
+data_proc = function(all.data, n.blocks, num.nb, k){
+  data.est  <- all.data[[1]]
+  data.pred <- all.data[[2]] 
+  
+  ##########################################
+  #### Run irregular voronoi block-NNGP models 
+  ##########################################
+  
+  case='irregular'
+  
+  name.cov="matern"
+  
+  datafill <- blockNNGP.struct(case= 'irregular', 
+                               data.est, 
+                               n.blocks, num.nb, name.cov,par.cov = 0.5,data.pred)
+  return(datafill)
+}
+
 
 #' @title choose.model()
 #' @description This function is called by inla.blockNNGP.model.
