@@ -82,7 +82,7 @@ blockNNGP_IRREG = function(case = "irregular", data.est , n.blocks,
     if (j > num.nb+1){
       ind1 <-  (sort.int(dist.mat[,j], index.return=TRUE))$ix
       ind <- (ind1[which(ind1<j)])[1:num.nb]
-      AdjMatrix[ind,j] = 1
+      AdjMatrix[ind,j] <-  1
     }
   }
   
@@ -140,7 +140,7 @@ blockNNGP_IRREG = function(case = "irregular", data.est , n.blocks,
     diag(C1) <- 1
     }
   if(name.cov=="matern"){
-    nu<- par.cov
+    nu <- par.cov
     C1 <-  (coords.D*0.04)^nu/(2^(nu-1)*gamma(nu))*besselK(x=coords.D*0.04, nu=nu)
     diag(C1) <- 1
   }
@@ -150,7 +150,7 @@ blockNNGP_IRREG = function(case = "irregular", data.est , n.blocks,
   invCsp[which(invC<0)] <- 1
   invCsp[which(invC==0)] <- 0
   
-  W = invCsp
+  W <- invCsp
   W <- as(W, "sparseMatrix")
   
   ###%%%%%%%%%%%%%%%%%%%%%%% END  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
