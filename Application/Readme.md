@@ -11,12 +11,9 @@ Download BSS data: data.est.Rdata and data.pred.Rdata
 Main code (with example usage) is denoted by [main]. 
 
 - [main]runblockNNGP-GLMC.R: fit the  models to the BSS data.
-- blockNNGPfunctions.R: auxiliary code that contains blockNNGP functions to run blockNNGP-GLMC and NNGP-GLMC models. 
-- blockNNGPfunctions2.R: auxiliary code that contains blockNNGP functions to run Palmí-Perales model using blockNNGP and NNGP. 
+- blockNNGPfunctions.R: auxiliary code that contains blockNNGP functions to run blockNNGP-GLMC model.  
 - blockNNGPrgeneric.R: INLA-rgeneric code for  blockNNGP spatial random effect.
-- NNGPrgeneric.R: INLA-rgeneric code for  NNGP spatial random effect.
-- summary_functions.R: to print summary (similar to the INLA summary function) of reparameterized parameters for blockNNGP-GLMC and NNGP-GLMC models.
-- summary_functions2.R: to print summary (similar to the INLA summary function) of reparameterized parameters for Palmí-Perales(2023)  model  using blockNNGP and NNGP.
+- summary_functions.R: to print summary (similar to the INLA summary function) of reparameterized parameters for blockNNGP-GLMC model.
 - utils.R: auxiliary functions.
 
 ```
