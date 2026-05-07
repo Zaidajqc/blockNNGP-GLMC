@@ -1,4 +1,4 @@
-## Functions to run blockNNGP-GLMC 
+## Functions called by runblockNNGP-GLMC.R
 ## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}) and Carlos Gonzáles.
 
 #' @title blockNNGP_IRREG()
