@@ -8,7 +8,7 @@
 ##    sampling data. It is assumed a Poisson 
 ##    distribution for the response variables (bird abundances of  
 ##    robin, Sparrow, starling). 
-##    @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
+##    @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}) and Carlos Gonzáles.
 ##
 rm(list=ls())
 
