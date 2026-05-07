@@ -10,7 +10,6 @@
 ##    robin, Sparrow, starling). 
 ##    @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
 ##
-############################################################################
 rm(list=ls())
 
 getwd()
@@ -45,13 +44,64 @@ library(tidyverse)
 library(raster)
 library(plotly)
 
+## Description: data_proc() function
+## Arguments:
+## all.data: list with data.est and data.pred
+## data.est: data for estimation, data.est=data.frame(loc=loc, y1=y1,y2=y2, y3=y3, X=X)
+##    loc: locations i.e. (long, lat), 
+##    y1: response variable 1, 
+##    y2: response variable 2, 
+##    y3: response variable 3, 
+##    X: matrix of covariates. 
+## data.pred: data for prediction,  with the same format of  data.est.
+## n.blocks:  number of  blocks  (regular or irregular)
+## num.nb: number of  neighbor blocks. 
+## k: number of response variables
+## Value: List with ordered data for estimation and prediction,
+## blocks and indexes required for blockNNGP.
 
+data_proc = function(all.data, n.blocks, num.nb, k){
+  data.est  <- all.data[[1]]
+  data.pred <- all.data[[2]] 
+  
+  ##########################################
+  #### Run irregular voronoi block-NNGP models 
+  ##########################################
+  
+  ## case: 'irregular' for blockNNGP models with irregular blocks (Voronoy poligons).  
+  case='irregular'
+  
+  name.cov="matern"
+  
+  datafill <- blockNNGP.struct(case= 'irregular', 
+                               data.est, 
+                               n.blocks, num.nb, name.cov,par.cov = 0.5,data.pred)
+  return(datafill)
+}
+
+
+## Description:
+##
+## run_poissonIrregK() function to fit blockNNGP-GLMC model trough INLA
+## which returns WAIC and LPML.
+## Results for estimation. 
+## Arguments:
+## datafill: data with structure for blockNNGP-GLMC model
+## n.blocks: number of  blocks  (irregular)
+## num.nb: number of  neighbor blocks. 
+## k: number of response variables
+## model: name of model  (to save)
+## Value: List with the following objects
+## list[[1]]: data.est,  data for estimation with format for inla()
+## list[[2]]: data.pred,  data for prediction  with format for inla()
+## list[[3]]: returns an object of class "inla". 
+## list[[4]]: datafill
 
 run_poissonIrregK = function(datafill, n.blocks, num.nb, k, model){
   
   # Ordering data
   data1 <- datafill[[1]]
-  names(data1)[c(1:6, 11)] <- c("loc.1", "loc.2","y1", "y2","y3",
+  names(data1) <- c("loc.1", "loc.2","y1", "y2","y3",
                    "X.1","blocks")
   nloc <- dim(data1)[1]
   
@@ -186,18 +236,32 @@ run_poissonIrregK = function(datafill, n.blocks, num.nb, k, model){
   datap <- datafill[[11]]
   names(datap)[1:5] <- c("loc.1", "loc.2", "y.1", "y.2", "y.3")
   
-  res6 <- list(data.est=data2, data.pred=datap, res4,datafill)
+  res6 <- list(data.est=data2, data.pred=datap, res4, datafill)
   
   return( res6)  
   
 }
 
-runforpred =function(datafill,data2,k,model){
+## Description:
+##
+## runforpred() function to fit blockNNGP-GLMC model trough INLA
+## with control.compute = list(config=TRUE) for posterior samples. 
+## Results for validation/prediction.
+## Arguments:
+## datafill: data with structure for blockNNGP-GLMC model
+## data2: list[[4]] from run_poissonIrregK() 
+## k: number of response variables
+## model: name of model  (to save)
+## Value: returns an object of class "inla". 
+## param.pos: save a list with posterior samples
+
+
+runforpred = function(datafill, data2, k, model){
   
   # Ordering data
   data1 <- datafill[[1]]
   names(data1)
-  names(data1)[c(1:6, 11)] <- c("loc.1", "loc.2","y1", "y2","y3",
+  names(data1) <- c("loc.1", "loc.2","y1", "y2","y3",
                    "X.1","blocks")
   nloc <- dim(data1)[1]
   
@@ -205,8 +269,8 @@ runforpred =function(datafill,data2,k,model){
   ind <- rep(0, k*nloc)
   k2  <- 1
   for(i in(sq)){
-    ind[i:(i+(k-1))] <- seq(k2,k*nloc, nloc)
-    k2 <-k2+1
+    ind[i:(i+(k-1))] <- seq(k2, k*nloc, nloc)
+    k2 <- k2+1
   }
   
   # set by user
@@ -283,37 +347,65 @@ runforpred =function(datafill,data2,k,model){
   return(res5)
 }
 
+
+## Description:
+##
+## summary_block1() function for posterior summary under reparameterization.
+## Arguments: 
+## res4: Call an object of class "inla", list[[3]] from run_poissonIrregK()
+## n.blocks: number of  blocks  (irregular)
+## num.nb: number of  neighbor blocks. 
+## data2: list[[1]] from run_poissonIrregK() 
+## Value: 
+## list[[1]]:  posterior summary under reparameterization,
+## format similar to the summary of INLA.
+## list[[2]]: Mean square error of  Y1, Y2 and Y3.
+
 # summary for estimations
-summary_block1 = function(res4, res5,n.blocks, num.nb,data2){
+summary_block1 = function(res4, n.blocks, num.nb, data2){
   k   <- 3
   res <- summary.blockNNGP_LMC(name.prior = "pc.prior", 
                                resf = res4, 
                                n.blocks, num.nb, 
                                family = "poisson")
-  nloc <- length(data2$y)/3
+  nloc  <- length(data2$y)/3
   indv1 <- seq(1, k*nloc, by = k)
   
-  MSE.Y <- NULL
+  MSE.Y     <- NULL
   saida.est <- NULL
   for(j in (1:k)){
     MSE.Yj.res <- round(mean((res4$summary.fitted.values[indv1+j-1,1]-data2$y[indv1+j-1])^2), 3)
     MSE.Y <- c(MSE.Y, MSE.Yj.res)
     saida.estj <- cbind(data2$y[indv1+j-1],res4$summary.fitted.values[indv1+j-1,1])
-    saida.est<- cbind(saida.est, saida.estj)
+    saida.est  <- cbind(saida.est, saida.estj)
   }
   
   par(mfrow = c(1,3))
-  plot(saida.est[,1],saida.est[,2])
-  plot(saida.est[,3],saida.est[,4])
-  plot(saida.est[,5],saida.est[,6])
+  plot(saida.est[,1], saida.est[,2])
+  plot(saida.est[,3], saida.est[,4])
+  plot(saida.est[,5], saida.est[,6])
   
   
-  res6 <- list( res,  MSE.Y)
+  res6 <- list( res, MSE.Y)
   return(res6)
 }
 
+
+## Description:
+##
+## summary_block2() function for predictions.
+## Arguments: 
+## n.blocks: number of  blocks  (irregular)
+## num.nb: number of  neighbor blocks. 
+## param.pos: list of posterior samples from runforpred()
+## res4:  list saved from run_poissonIrregK()
+## Value: returns a list of objects:
+## list[[1]]: 3 columns (y1, y2, y3) and 3 columns with predictions 
+## list[[2]]: Mean square prediction error of Y1, Y2 and Y3. 
+
+
 # summary for predictions
-summary_block2 = function(n.blocks, num.nb, param.pos,res4){
+summary_block2 = function(n.blocks, num.nb, param.pos, res4){
   saida.pred <- blockNNGP_predLMC(case = 'irregular', n.blocks, num.nb,
                                   data.est = res4[[1]], pred.data = res4[[2]],
                                   n.sample = 1000,
@@ -341,22 +433,23 @@ summary_block2 = function(n.blocks, num.nb, param.pos,res4){
 
 
 ##########################################
-#M1: robin, Sparrow, starling
-#M2: robin, starling, Sparrow
-#M3: Sparrow, robin , starling 
-#M4: Sparrow, starling, robin 
-#M5: starling, robin, Sparrow
-#M6: starling, Sparrow, robin
+## Run the next models:
+# M1: robin, Sparrow, starling
+# M2: robin, starling, Sparrow
+# M3: Sparrow, robin , starling 
+# M4: Sparrow, starling, robin 
+# M5: starling, robin, Sparrow
+# M6: starling, Sparrow, robin
 ###########################################
 
-setwd("~/Documents/ZAIDA_MAC/PAPERS/multivariateblockNNGP/newCODES/app4-1/M1/")
+
 dir.save = getwd()
-load( paste("data.original0.Rdata",sep=""))
+load( paste("data.original.Rdata", sep=""))
 
 #  data for estimation and validation/prediction
 nloc <- dim(data.original)[1]
 indsample <- sample( 1:nloc, round(0.8*nloc))
-data.est <- data.original[indsample,]
+data.est  <- data.original[indsample,]
 data.pred <- data.original[-indsample,]
 
 all.data1 <- list(data.est, data.pred)
@@ -365,7 +458,7 @@ rm(data.est, data.pred, data.original, nloc, indsample)
 
 # creating blocks
 case <- 'irregular'
-n.blocks    	<- 100
+n.blocks    	<- 60
 num.nb 	<- 2
 k <- 3
 
@@ -374,14 +467,14 @@ rm(all.data1)
 
 # M1: robin, Sparrow, starling
 resI1 <- run_poissonIrregK(dataf, n.blocks, num.nb, k, model = "M1")
-save(resI1, file = paste("M1",case, n.blocks,"-", num.nb,"resI1.Rdata",sep = ''))
+save(resI1, file = paste("M1",case, n.blocks, "-", num.nb, "resI1.Rdata", sep = ''))
 rm(resI1)
 
 
 # M2: robin(3),starling(5),Sparrow(4)
 dataf2 <- dataf
 dataf2[[1]] <- dataf[[1]][,c(1,2, 3,5,4,6:11)]
-resI2 <- run_poissonIrregK(dataf2, n.blocks, num.nb,k,model = "M2")
+resI2 <- run_poissonIrregK(dataf2, n.blocks, num.nb, k, model = "M2")
 save(resI2, file=paste("M2", case, n.blocks,"-", num.nb,"resI2.Rdata", sep = ''))
 rm(resI2, dataf2)
 
@@ -450,27 +543,27 @@ rm(resI6, predI6)
 
 # summary
 load(paste(getwd(),"/M1irregular60-2resI1.Rdata", sep = ""))
-resF11 <- summary_block1(res4 = resI1[[3]],  num.nb, data2 = resI1[[1]])
+resF11 <- summary_block1(res4 = resI1[[3]], n.blocks,  num.nb, data2 = resI1[[1]])
 save(resF11, file = paste("M1", case, n.blocks,"-", num.nb, "resF11.Rdata",sep = ''))
 
 load(paste(getwd(),"/M2irregular60-2resI2.Rdata", sep = ""))
-resF21 <- summary_block1(res4 = resI2[[3]],  num.nb, data2 = resI2[[1]])
+resF21 <- summary_block1(res4 = resI2[[3]], n.blocks,  num.nb, data2 = resI2[[1]])
 save(resF21, file = paste("M2", case, n.blocks, "-", num.nb, "resF21.Rdata", sep = ''))
 
 load(paste(getwd(),"/M3irregular60-2resI3.Rdata", sep = ""))
-resF31 <- summary_block1(res4 = resI3[[3]],  num.nb, data2 = resI3[[1]])
+resF31 <- summary_block1(res4 = resI3[[3]], n.blocks,  num.nb, data2 = resI3[[1]])
 save(resF31, file = paste("M3", case, n.blocks, "-", num.nb, "resF31.Rdata", sep = ''))
 
 load(paste( getwd(),"/M4irregular60-2resI4.Rdata", sep = ""))
-resF41 <- summary_block1(res4 = resI4[[3]],  num.nb, data2 = resI4[[1]])
+resF41 <- summary_block1(res4 = resI4[[3]], n.blocks,  num.nb, data2 = resI4[[1]])
 save(resF41, file=paste("M4", case, n.blocks, "-", num.nb, "resF41.Rdata", sep=''))
 
 load(paste(getwd(),"/M5irregular60-2resI5.Rdata", sep = ""))
-resF51 <- summary_block1(res4 = resI5[[3]],  num.nb, data2 = resI5[[1]] )
+resF51 <- summary_block1(res4 = resI5[[3]], n.blocks,  num.nb, data2 = resI5[[1]] )
 save(resF51, file=paste("M5", case, n.blocks, "-", num.nb, "resF51.Rdata", sep = ''))
 
 load(paste(getwd(),"/M6irregular60-2resI6.Rdata", sep = ""))
-resF61 <- summary_block1(res4 = resI6[[3]],  num.nb, data2 = resI6[[1]])
+resF61 <- summary_block1(res4 = resI6[[3]], n.blocks,  num.nb, data2 = resI6[[1]])
 save(resF61, file = paste("M6", case, n.blocks,"-", num.nb, "resF61.Rdata", sep = ''))
 
 rm(resI1, resF11,resI2, resF21,resI3, resF31,
@@ -564,7 +657,7 @@ load(paste(getwd(),"/M5irregular60-2resF52.Rdata", sep = ""))
 waic5 <- resI5[[3]]$waic$waic
 lpml5 <- sum(log(resI5[[3]]$cpo$cpo))
 time5 <- resI5[[3]]$cpu.used[4]
-rmse5 <- sum(resF51[[2]])/3
+rmse5 = sum(resF51[[2]])/3
 rmsp5 <- sum(resF25[[2]])/3
 res5  <- c(waic5, lpml5, rmse5,rmsp5, time5)
 
