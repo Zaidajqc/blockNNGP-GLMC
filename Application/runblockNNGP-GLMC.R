@@ -45,25 +45,6 @@ library(raster)
 library(plotly)
 
 
-data_proc = function(all.data, n.blocks, num.nb, k){
-  data.est  <- all.data[[1]]
-  data.pred <- all.data[[2]] 
-  
-  ##########################################
-  #### Run irregular voronoi block-NNGP models 
-  ##########################################
-  
-  case='irregular'
-  
-  name.cov="matern"
-  
-  datafill <- blockNNGP.struct(case= 'irregular', 
-                               data.est, 
-                               n.blocks, num.nb, name.cov,par.cov = 0.5,data.pred)
-  return(datafill)
-}
-
-
 
 run_poissonIrregK = function(datafill, n.blocks, num.nb, k, model){
   
