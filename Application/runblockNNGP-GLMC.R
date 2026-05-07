@@ -583,8 +583,8 @@ names(resfinal) <- c("WAIC", "LPML", "MSE", "MSP", "TIME")
 print(resfinal)
 
 # if best model 
-resF61[[1]]
+resF11[[1]]
 # show predictions 
-saida.pred <- resF26[[1]]
+saida.pred <- resF12[[1]]
 
 
