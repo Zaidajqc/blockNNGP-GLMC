@@ -1,5 +1,5 @@
 ## Functions called by runblockNNGP-GLMC.R
-## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}) and Carlos Gonzáles.
+## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
 
 #' @title blockNNGP_IRREG()
 #' @description function  to order the data, create the mask for Q, 
