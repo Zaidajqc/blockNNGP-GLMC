@@ -1,3 +1,6 @@
+## functions to run blockNNGP-GLMC and NNGP-GLMC models.
+## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
+
 ## Description:
 ##
 ## blockNNGP_reg() function  fits  block-NNGP models through REGULAR BLOCKS using INLA
