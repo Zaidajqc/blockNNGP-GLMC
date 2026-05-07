@@ -1,6 +1,6 @@
 ## Description:
 ##
-# R implementation of block-NNGP latent effect with rgeneric
+# R implementation of block-NNGP GLMC latent effect with rgeneric
 
 # A variable theta is defined by INLA in the code to store theta=(theta1, theta2)  to provide an internal representation of the hyperparameters (sigma2 and  phi, respectively) to make numerical optimization easier.
 # In order to define the block-NNGP latent effect in INLA, we need to define the next functions:
