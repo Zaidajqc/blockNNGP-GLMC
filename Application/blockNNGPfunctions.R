@@ -1,3 +1,6 @@
+## Functions to run blockNNGP-GLMC 
+## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}) and Carlos Gonzáles.
+
 #' @title blockNNGP_IRREG()
 #' @description function  to order the data, create the mask for Q, 
 #' and create blocks and indexed required for  blockNNGP-GLMC models
