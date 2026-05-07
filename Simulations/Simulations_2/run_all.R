@@ -694,8 +694,8 @@ post_results = function(resf){
   cov.param <- c(covbeta00, covbeta01, covbeta02, covbeta22,covsigma21, covphi1, covsigma22, covphi2,covlambda)
   
   
-  name.crit <- c("waic", "LPML","time(sec)","MSP.Y1","MSP.Y2","MSE.Y1.res", "MSE.Y2.res") #, "RMSPy")
-  crit.model<- round(c(  waic, LPML,  time, MSP.Y1, MSP.Y2,MSE.Y1.res,MSE.Y2.res),3) #, RMSP
+  name.crit <- c("waic", "LPML","time(sec)","MSP.Y1","MSP.Y2","MSE.Y1.res", "MSE.Y2.res") 
+  crit.model<- round(c(  waic, LPML,  time, MSP.Y1, MSP.Y2,MSE.Y1.res,MSE.Y2.res),3)
   name.full.results <- c(t(names.mean.estparam), t(names.cov.estparam), t(name.crit))
   full.results <- c(t(mean.estparam), t(cov.param), t(crit.model) )
   final.res <- data.frame(res=name.full.results, val=full.results)
