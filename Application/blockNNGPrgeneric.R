@@ -13,7 +13,8 @@
 
 ## Arguments:
 ##
-#blockNNGP.model <- inla.rgeneric.define(inla.rgeneric.blockNNGP.model, W = W, n= n, n.blocks= n.blocks,nb =nb,ind_obs1=ind_obs1,num1=num1,indb=indb,coords.D=coords.D)
+#blockNNGP.model <- inla.rgeneric.define(inla.rgeneric.blockNNGP.model, W = W,
+# n= n, n.blocks= n.blocks,nb =nb,ind_obs1=ind_obs1,num1=num1,indb=indb,coords.D=coords.D)
 
 
 # Define previous variables as global to avoid warnings()
