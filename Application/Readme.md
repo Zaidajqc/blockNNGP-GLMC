@@ -1,6 +1,6 @@
 # GLMC-blockNNGP 
 
-## Z. Quiroz, M. Prates, C. Pizango and H. Rue.
+## Z. Quiroz, M. Prates, C. Gonzáles and H. Rue.
 
 We provide the R code needed to run  the application of "Fast Bayesian inference of generalized linear blockNNGP model of coregionalization through INLA". 
 
