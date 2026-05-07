@@ -563,7 +563,7 @@ load(paste(getwd(),"/M5irregular60-2resF52.Rdata", sep = ""))
 waic5 <- resI5[[3]]$waic$waic
 lpml5 <- sum(log(resI5[[3]]$cpo$cpo))
 time5 <- resI5[[3]]$cpu.used[4]
-rmse5 = sum(resF51[[2]])/3
+rmse5 <- sum(resF51[[2]])/3
 rmsp5 <- sum(resF25[[2]])/3
 res5  <- c(waic5, lpml5, rmse5,rmsp5, time5)
 
