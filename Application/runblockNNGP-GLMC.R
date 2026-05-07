@@ -10,6 +10,7 @@
 ##    robin, Sparrow, starling). 
 ##    @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
 ##
+############################################################################
 rm(list=ls())
 
 getwd()
