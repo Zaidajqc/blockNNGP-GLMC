@@ -1,5 +1,6 @@
 # R implementation of NNGP latent effect for NNGP-GLM model
 ## with rgeneric
+## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
 
 
 # Define previous variables as global to avoid warnings()
