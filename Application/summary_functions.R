@@ -1,5 +1,6 @@
 #' @title summary.blockNNGP()
 #' @description This function returns summary of posterior parameters for GLMC-blockNNGP models.
+## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
 
 #summary for blockNNGP 
 summary.blockNNGP_LMC <- function(name.prior, resf,n.blocks, 
