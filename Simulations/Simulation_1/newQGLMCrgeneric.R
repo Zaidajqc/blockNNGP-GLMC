@@ -2,6 +2,7 @@
 #'
 #' @description blockNNGP-GLMC
 #'
+## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
 
 # Define previous variables as global to avoid warnings()
 utils::globalVariables(c("k", "W", "lam1", "lam2",
