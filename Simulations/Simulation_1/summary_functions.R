@@ -1,4 +1,5 @@
-#summary for blockNNGP 
+#summary function for blockNNGP-GLMC and NNGP-GLMC models  
+## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
 
 summary.blockNNGP_LMC <- function(name.prior, resf, data1,n.blocks, 
                                   num.nb,prior.set=NULL,family="gaussian"){
