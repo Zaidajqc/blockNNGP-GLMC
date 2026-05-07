@@ -1,6 +1,7 @@
 
-
 ## blockNNGP and NNGP functions
+## @author:  Zaida Quiroz (\email{zquiroz@pucp.edu.pe}).
+
 
 meancov_nn <- function(Sigma, ind_obs, ind_neigblocks, indnum){
   invC_nbi <- chol2inv(chol(Sigma[ind_neigblocks, ind_neigblocks] ))
