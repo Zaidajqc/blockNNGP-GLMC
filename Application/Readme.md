@@ -6,7 +6,7 @@ We provide the R code needed to run  the application of "Fast Bayesian inference
 
 You have to add "INLA"  from https://www.r-inla.org/download-install.  
 
-Download BSS data: data.original0.Rdata
+Download BSS data: data.original.Rdata
 
 Main code (with example usage) is denoted by [main]. 
 
