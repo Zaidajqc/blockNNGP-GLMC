@@ -474,20 +474,6 @@ resI1 <- run_poissonIrregK(dataf, n.blocks, num.nb, k, model = "M1")
 save(resI1, file = paste("M1", case, n.blocks, "-", num.nb,"resI1.Rdata", sep = ''))
 rm(resI1)
 
-resF11 <- summary_block1(res4 = resI1[[3]],  num.nb, data2 = resI1[[1]])
-
-# validation 
-predI1 <- runforpred(datafill = resI1[[4]], data2 = resI1[[1]], k = 3, model = 'M1')
-save(predI1, file = paste("M1", case, n.blocks, "-", num.nb, "predI1.Rdata",sep = ''))
-#rm(resI1, predI1)
-
-
-load("~/Documents/multiblockNNGP/app4/M1param.posirregular60-2.Rdata")
-load("~/Documents/multiblockNNGP/app4/M1irregular60-2resI1.Rdata")
-resF12 <- summary_block2(n.blocks, num.nb, param.pos, res4 = resI1)
-save(resF12, file = paste("M1", case, n.blocks, "-", num.nb, "resF12.Rdata", sep = ''))
-
-
 
 # M2: robin(3),starling(5),Sparrow(4)
 dataf2 <- dataf
