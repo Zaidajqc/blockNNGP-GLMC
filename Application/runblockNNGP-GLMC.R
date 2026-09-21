@@ -343,7 +343,7 @@ runforpred = function(datafill, data2, k, model){
                family = "poisson",
                control.compute = list(config = TRUE),
                verbose = TRUE)
-  n.sample <- 100
+  n.sample <- 1000
   set.seed(1)
   param.pos  <-   inla.posterior.sample(n.sample, res5)
 
@@ -410,7 +410,7 @@ summary_block2 = function(n.blocks, num.nb, param.pos,res4){
 
   saida.pred <- blockNNGP_predLMC(case = 'irregular', n.blocks, num.nb,
                                   data.est = res4[[1]], pred.data = res4[[2]],
-                                  n.sample = 100, 
+                                  n.sample = 1000, 
                                   family = "poisson", k = 3, param.pos,
                                   AdjMatrix = res4[[4]]$AdjMatrix)
 
@@ -453,7 +453,7 @@ load( paste("data.original0.Rdata", sep = ""))
 
 #  data for estimation and validation/prediction 
 nloc      <- dim(data.original)[1]
-indsample <- sample(1:nloc, round(0.3*nloc))
+indsample <- sample(1:nloc, round(0.8*nloc))
 data.est  <- data.original[indsample, ]
 data.pred <- data.original[-indsample, ]
   
@@ -461,7 +461,7 @@ all.data1 <- list(data.est, data.pred)
 
 # creating blocks
 case       <- 'irregular'
-n.blocks   <- 40
+n.blocks   <- 60
 num.nb 	   <- 2
 k          <- 3
 
